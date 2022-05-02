@@ -17,8 +17,16 @@ atendido = fila.dequeue()
 print(f'Atendido: {atendido}')
 
 # Verifica quem será o próximo, sem retirá-lo da fila
-proximo = fila.dequeue()
+proximo = fila.peek()
 print(f'Próximo: {proximo}')
+
+# Imprime os elementos da fila
+print(fila)
+
+# Novas pessoas entram na fila
+fila.enqueue('Bruno')
+fila.enqueue('Bruna')
+fila.enqueue('Bruno')
 
 # Imprime os elementos da fila
 print(fila)
