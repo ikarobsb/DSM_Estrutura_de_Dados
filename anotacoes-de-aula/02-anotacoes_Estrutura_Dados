@@ -1,0 +1,17 @@
+**Estrutura de dados**
+
+*TAD* tipo abstrato de dados: conceito (funcionamento) permanece, mas a implementação pode mudar.
+
+*Pillhas*
+
+Analogia a pilha de pratos. 
+        _______
+        _______
+        _______
+        _______
+        _______
+
+O último a entrar foi o primeiro a sair - *Last in, first out - LIFO*.
+
+Logo --> a pilha é utilizada para inverter a ordem dos elementos de uma lista.
+
