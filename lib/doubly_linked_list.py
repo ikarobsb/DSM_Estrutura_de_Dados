@@ -81,76 +81,132 @@ class DoublyLinkedList:
             inserted.prev = before
             inserted.next = node_pos
             node_pos.prev = inserted
-
-
         
         # Incrementa a contagem de itens
         self.__count += 1
 
-    # Inserção no início da lista
+    """
+        Método de "atalho" para a inserção no início da lista
+    """
     def insert_head(self, val):
         self.insert(0, val)
 
-    # Inserção no final da lista
+    """
+        Método de "atalho" para a inserção no final da lista
+    """
     def insert_tail(self, val):
         self.insert(self.count, val)
 
-
-    # Método para retirar o primeiro elemento da lista
-    def remove_head(self):
-        if self.is_empty:
-            return None
-        else:
-            removed = self.__head
-            self.__head = self.__head.next
-            self.__head.prev = None
-            self.__count -= 1
-            return removed.data
-
-    # Método para retirar de posição específica	
+    """
+        Método que remove o nodo da posição especificada
+    """
     def remove(self, pos):
-        # Lista vazia ou posição fora dos limites da lista
-        if self.is_empty or pos < 0 or pos >= self.count -1:
-            raise Exception('ERRO: impossível remover')
-        
-        # Remoção do primeiro elemento
+
+        # 1º caso: lista vazia ou posição fora dos limites da lista
+        if self.is_empty or pos < 0 or pos > self.count - 1:
+            raise Exception('ERRO: posição inválida para remoção')
+
+        # 2º caso: remoção do início da lista
         if pos == 0:
             # Será removido o head da lista
             removed = self.__head
-            # Atualiza o head da lista
+            # O novo head passa a ser o sucessor do nodo removido
             self.__head = removed.next
             # Se o novo __head for um nodo válido, ele não pode ter antecessor
             if self.__head is not None: self.__head.prev = None
-            # Em caso de remoção do único nodo restante, atualiza o __tail
+            # Em caso de remoção do único nodo restante, __tail
+            # precisa passar a valer None
             if self.count == 1: self.__tail = None
-        
-        # Remoção do último elemento
+
+        # 3º caso: remoção do final da lista
         elif pos == self.count - 1:
             # Será removido o tail da lista
             removed = self.__tail
-            # Atualiza o tail da lista
+            # O novo tail passa a ser o antecessor do nodo removido
             self.__tail = removed.prev
             # Se o novo __tail for um nodo válido, ele não pode ter sucessor
             if self.__tail is not None: self.__tail.next = None
-            # Em caso de remoção do único nodo restante, atualiza o __head
+            # Em caso de remoção do único nodo restante, __head
+            # precisa passar a valer None
             if self.count == 1: self.__head = None
-        
-        # Remoção de posição intermediária
+
+        # 4º caso: remoção de posição intermediária
         else:
-            # Encontrar o nodo atualmente na posição de remoção
+            # Encontra o nodo a ser removido
             removed = self.__find_node(pos)
-            before = removed.prev # nodo anterior
-            after = removed.next # nodo seguinte
-            # Atualiza os ponteiros do nodo anterior
+            before = removed.prev   # Nodo anterior
+            after = removed.next    # Nodo posterior
+            # O nodo anterior passa a apontar à frente para o nodo after
             before.next = after
-            # Atualiza os ponteiros do nodo seguinte
+            # O nodo posterior passa a apontar para tràs para o nodo before
             after.prev = before
-        
-        # Decrementa a contagem de itens
+
+        # Decrementa a quantidade de itens da lista
         self.__count -= 1
-        # Retorna o dado armazenado no nodo removido
+        # Retorna o dado de usuário armazenado no nodo removido
         return removed.data
+
+    """
+        Método de atalho para remoção do início da lista
+    """
+    def remove_head(self):
+        return self.remove(0)
+
+    """
+        Método de atalho para remoção do final da lista
+    """
+    def remove_tail(self):
+        return self.remove(self.count - 1)
+
+    """
+        Método para consultar o valor de um nodo, dada a sua posição
+    """
+    def peek(self, pos):
+        # Verifica se a posição passada está nos limites da lista
+        if self.is_empty or pos < 0 or pos > self.count - 1:
+            raise Exception('ERRO: posição inválida para consulta')
+
+        # Manda encontrar o nodo correspondente à posição
+        node = self.__find_node(pos)
+
+        # Retorna o valor armazenado no nodo
+        return node.data
+
+    """
+        Método de atalho para consultar o valor do primeiro nodo
+    """
+    def peek_head(self):
+        return self.peek(0)
+
+    """
+        Método de atalho para consultar o valor do último nodo
+    """
+    def peek_tail(self):
+        return self.peek(self.count - 1)
+
+    
+    """
+        Método que retorna a PRIMEIRA POSIÇÃO, a partir da posição
+        inicial de busca, onde há a ocorrência de um valor.
+        Caso não encontre, retorna -1.     
+    """
+    def index(self, val, start_pos = 0):
         
+        # A posição inicial de busca deve estar dentro dos limites da lista
+        if start_pos < 0 or start_pos > self.count - 1: return -1
+
+        node = None
+
+        for pos in range(start_pos, self.count):
+            if node is None: node = self.__find_node(start_pos)
+            else: node = node.next
+            
+            # O valor armazenado no nodo corresponde ao valor buscado;
+            # retorna a posição do nodo
+            if node.data == val: return pos
+
+        return -1   # Nada encontrado
+
     """
         Função privada que encontra o nodo da posição especificada
     """
@@ -175,8 +231,10 @@ class DoublyLinkedList:
                 for i in range(self.count - 2, pos - 1, -1): node = node.prev
 
             return node
-        
-    # Método que permite visualizar a lista como uma string 
+
+    """
+        Método que permite visualizar a lista encadeada como uma string
+    """
     def __str__(self):
         output = ""
         node = self.__head
@@ -184,15 +242,6 @@ class DoublyLinkedList:
             if output != "": output += ", "
             output += f"({i}) => {node.data}"
             node = node.next
-        return f"[ {output} ], count: {self.count} "
+        return f"[ {output} ], count: {self.count}"
 
-########################################################################
-
-    
-
-
-
-
-
-        
-
+###############################################################################
