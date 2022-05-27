@@ -34,3 +34,5 @@ Deque (Double-Ended Queue) é uma estrutura derivada da fila que permite inserç
 **Lista duplamente encadeada** --> os itens da lista estão espalhados na memória, mas o programa lida com ele como se estivessem armazenados de maneira sequencial.
 
 https://sites.google.com/site/proffdesiqueiraed/_/rsrc/1472856774073/aulas/aula-6---listas-duplamente-encadeadas/Captura%20de%20tela%20de%202015-08-11%2015%3A00%3A14.png
+
+**Grafos**
